@@ -1,0 +1,116 @@
+{
+  "name": "binance-trading-bot",
+  "version": "0.0.66",
+  "description": "Binance Auto Trading Bot",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "cross-env NODE_ENV=development nodemon app/server.js",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js --progress --profile",
+    "lint": "eslint ./app --fix",
+    "test": "cross-env NODE_ENV=test jest --coverage --detectOpenHandles",
+    "docker:build": "docker build . --build-arg PACKAGE_VERSION=$(node -p \"require('./package.json').version\") --build-arg GIT_HASH=$(git rev-parse --short HEAD) --build-arg NODE_ENV=production --target production-stage -t chrisleekr/binance-trading-bot:latest",
+    "docker:build:dev": "docker build . --build-arg PACKAGE_VERSION=$(node -p \"require('./package.json').version\") --build-arg GIT_HASH=$(git rev-parse --short HEAD) --build-arg NODE_ENV=development --target dev-stage -t chrisleekr/binance-trading-bot:latest",
+    "docker:build:win": "powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./scripts/docker-build.ps1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrisleekr/binance-traiding-bot.git"
+  },
+  "keywords": [
+    "Binance",
+    "Auto Trading Bot",
+    "Binance Trading Bot"
+  ],
+  "author": "Chris Lee <git@chrislee.kr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chrisleekr/binance-traiding-bot/issues"
+  },
+  "homepage": "https://github.com/chrisleekr/binance-traiding-bot#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "binance-api-node": "^0.10.41",
+    "bunyan": "^1.8.15",
+    "clean-webpack-plugin": "^3.0.0",
+    "config": "^3.3.6",
+    "cron": "^1.8.2",
+    "cross-env": "^7.0.3",
+    "express": "^4.17.1",
+    "ioredis": "^4.27.1",
+    "localtunnel": "^2.0.1",
+    "lodash": "^4.17.21",
+    "lodash-webpack-plugin": "^0.11.6",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
+    "mongodb": "3.6.6",
+    "pubsub-js": "^1.9.3",
+    "redlock": "^4.2.0",
+    "uuid": "^8.3.2",
+    "ws": "^7.4.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.16",
+    "@babel/preset-env": "^7.14.1",
+    "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.0.1",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.2.2",
+    "babel-plugin-lodash": "^3.3.4",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^7.25.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-flowtype": "^5.7.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^6.0.0",
+    "jest": "^26.6.3",
+    "lint-staged": "^10.5.4",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.6.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "resetMocks": true,
+    "globalSetup": "./jest.setup.js",
+    "collectCoverageFrom": [
+      "app/**/*.js",
+      "!**/node_modules/**",
+      "!**/__tests__/**",
+      "!**/coverage/**"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "npm run lint"
+    ]
+  }
+}
